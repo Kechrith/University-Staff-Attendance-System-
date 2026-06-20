@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { GraduationCap } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { BRAND, NAV_ITEMS } from "@/lib/constants";
-import { useAsyncData } from "@/hooks/use-async-data";
-import { fetchCurrentUser } from "@/services/dashboardService";
+import { BRAND } from "@/lib/constants";
+import { getRoleConfig } from "@/lib/roles";
 
 interface SidebarProps {
   /** Called after a nav item is clicked — used to close the mobile sheet. */
@@ -18,26 +16,24 @@ interface SidebarProps {
 
 /**
  * Sidebar navigation shared between the desktop fixed rail and the mobile
- * sheet (see Navbar.tsx). Pure presentational + routing logic only.
+ * sheet (see Navbar.tsx). Pure presentational + routing logic only. Nav
+ * items and the signed-in user are resolved from the URL's role segment
+ * (see `lib/roles.ts`) so the same component serves every role's pages.
  */
 export function Sidebar({ onNavigate, className }: SidebarProps) {
   const pathname = usePathname();
-  const { data: currentUser, isLoading } = useAsyncData(fetchCurrentUser);
+  const router = useRouter();
+  const role = getRoleConfig(pathname);
 
   return (
     <div className={cn("flex h-full flex-col bg-sidebar text-sidebar-foreground", className)}>
-      <div className="flex items-center gap-2 px-6 py-6">
-        <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-          <GraduationCap className="size-5" />
-        </div>
-        <div className="leading-tight">
-          <p className="text-sm font-semibold">{BRAND.name}</p>
-          <p className="text-xs text-muted-foreground">{BRAND.tagline}</p>
-        </div>
+      <div className="flex items-center border-b border-sidebar-border px-6 py-5">
+        {/* eslint-disable-next-line @next/next/no-img-element -- static raster logo, no benefit from next/image's optimizer */}
+        <img src="/logo/logo&title_login.png" alt={`${BRAND.name} logo`} className="h-auto w-full" />
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3" aria-label="Main navigation">
-        {NAV_ITEMS.map((item) => {
+        {role.navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           return (
@@ -68,37 +64,16 @@ export function Sidebar({ onNavigate, className }: SidebarProps) {
       </nav>
 
       <div className="border-t border-sidebar-border px-4 py-4">
-        {isLoading ? (
-          <div className="flex items-center gap-3">
-            <Skeleton className="size-10 shrink-0 rounded-full" />
-            <div className="min-w-0 flex-1 space-y-1.5">
-              <Skeleton className="h-3.5 w-24" />
-              <Skeleton className="h-3 w-20" />
-            </div>
-          </div>
-        ) : (
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Avatar className="size-10 border border-sidebar-border">
-                <AvatarImage src={currentUser?.avatar || undefined} alt={currentUser?.name} />
-                <AvatarFallback>{currentUser?.name ? currentUser.name.slice(0, 2) : "—"}</AvatarFallback>
-              </Avatar>
-              {currentUser?.online ? (
-                <span
-                  className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-sidebar bg-success"
-                  aria-label="Online"
-                  title="Online"
-                />
-              ) : null}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold">{currentUser?.name || "—"}</p>
-              <p className="truncate text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                {currentUser?.position || "—"}
-              </p>
-            </div>
-          </div>
-        )}
+        <Button
+          className="w-full justify-start gap-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+          onClick={() => {
+            onNavigate?.();
+            router.push("/");
+          }}
+        >
+          <LogOut className="size-4" />
+          Log out
+        </Button>
       </div>
     </div>
   );

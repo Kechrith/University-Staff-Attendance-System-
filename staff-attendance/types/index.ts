@@ -340,3 +340,210 @@ export interface DepartmentStaffMember {
   /** e.g. "Professor", "Lecturer", "Admin Assistant" */
   role: string;
 }
+
+/**
+ * Domain types for the Program Coordinator pages: dashboard, attendance,
+ * leave management, schedule, reports, and settings. Kept separate from the
+ * Department Head types above even where shapes are similar, so each role's
+ * module can evolve independently.
+ */
+
+export interface CoordinatorDashboardSummary {
+  managedPrograms: number;
+  managedProgramsGrowthLabel: string;
+  activeLecturers: number;
+  activeLecturersRateLabel: string;
+  absenceAlerts: number;
+  roomUtilization: number;
+  roomSeatCount: number;
+}
+
+export type CoordinatorLiveMonitorTone = "success" | "warning" | "info";
+
+export interface CoordinatorLiveMonitorEvent {
+  id: string;
+  message: string;
+  detail: string;
+  timestamp: string;
+  tone: CoordinatorLiveMonitorTone;
+}
+
+export type CoordinatorClassStatus = "present" | "late" | "upcoming";
+
+export interface CoordinatorClassOverviewItem {
+  id: string;
+  department: string;
+  studentCount: number;
+  title: string;
+  instructorName: string;
+  instructorAvatar: string;
+  scheduleLabel: string;
+  status: CoordinatorClassStatus;
+}
+
+export interface CoordinatorDailyPulse {
+  presentToday: number;
+  totalLecturers: number;
+  lateArrival: number;
+  lateArrivalTrendLabel: string;
+  absentOnLeave: number;
+  preApprovedLeaveCount: number;
+}
+
+export interface CoordinatorTodaysFocus {
+  monthLabel: string;
+  sessionLabel: string;
+  sessionTimeRangeLabel: string;
+}
+
+export interface CoordinatorProgramDistributionDatum {
+  program: string;
+  percentage: number;
+}
+
+export type LecturerAttendanceStatus = "present" | "late" | "absent";
+export type LecturerCheckInMethod = "QR Scan" | "Biometric" | "—";
+
+export interface LecturerAttendanceLogEntry {
+  id: string;
+  lecturerName: string;
+  lecturerAvatar: string;
+  position: string;
+  course: string;
+  classCode: string;
+  timeSlotLabel: string;
+  checkInLabel: string;
+  status: LecturerAttendanceStatus;
+  method: LecturerCheckInMethod;
+}
+
+export interface CoordinatorLeaveSummary {
+  pendingCount: number;
+  approvedMonthly: number;
+  rejectedMonthly: number;
+  totalManagedLecturers: number;
+}
+
+export interface LeaveQueueEntry {
+  id: string;
+  lecturerName: string;
+  lecturerAvatar: string;
+  employeeId: string;
+  program: string;
+  programDetail: string;
+  startDate: string;
+  endDate: string;
+  duration: string;
+  leaveType: LeaveType;
+  status: "pending" | "approved" | "rejected";
+}
+
+export interface ProgramLeaveCoverageDatum {
+  program: string;
+  presentPercentage: number;
+}
+
+export interface CoordinatorHolidayInfo {
+  name: string;
+  dateRangeLabel: string;
+  daysObserved: number;
+}
+
+export interface CoordinatorScheduleOverview {
+  weekRangeLabel: string;
+  conflictCount: number;
+  conflictDetailLabel: string;
+  roomUtilization: number;
+  roomUtilizationTrendLabel: string;
+  pendingActions: number;
+  lastUpdatedLabel: string;
+}
+
+export type CoordinatorScheduleSlotStatus = "lecture" | "lab" | "conflict";
+
+export interface CoordinatorScheduleSlot {
+  id: string;
+  day: WeekDay;
+  /** Must match one of the grid's `timeSlots`. */
+  time: string;
+  title: string;
+  subtitle: string;
+  status: CoordinatorScheduleSlotStatus;
+}
+
+export interface CoordinatorWeeklyScheduleGrid {
+  timeSlots: string[];
+  slots: CoordinatorScheduleSlot[];
+}
+
+export interface CoordinatorKpis {
+  attendanceRate: number;
+  attendanceRateTrendLabel: string;
+  gpaAverage: number;
+  gpaTrendLabel: string;
+  scheduleAdherence: number;
+  scheduleAdherenceTrendLabel: string;
+  totalEnrollment: number;
+  totalEnrollmentTrendLabel: string;
+}
+
+export interface AcademicPerformanceTrendPoint {
+  yearLabel: string;
+  departmentValue: number;
+  universityAverage: number;
+}
+
+export type LecturerAdherenceTone = "top" | "stable" | "action-required";
+
+export interface LecturerAdherenceItem {
+  id: string;
+  name: string;
+  avatar: string;
+  subject: string;
+  percentage: number;
+  tone: LecturerAdherenceTone;
+}
+
+export type AttendanceBreakdownStatus = "excellent" | "on-target" | "low-attendance";
+
+export interface WeeklyAttendanceBreakdownRow {
+  id: string;
+  classCode: string;
+  subjectName: string;
+  lecturerName: string;
+  enrolled: number;
+  attendancePercentage: number;
+  status: AttendanceBreakdownStatus;
+}
+
+export interface CoordinatorProfile {
+  fullName: string;
+  department: string;
+  universityEmail: string;
+  employeeId: string;
+  bio: string;
+}
+
+export interface CoordinatorAccessSession {
+  lastLoginLabel: string;
+  onDuty: boolean;
+}
+
+export interface CoordinationPolicies {
+  automaticScheduleConflictDetection: boolean;
+  leaveRequestEscalation: boolean;
+  auditLogVisibility: boolean;
+}
+
+export interface CoordinatorAlertPreference {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface CoordinatorSecurityItem {
+  id: "password" | "2fa" | "login-history";
+  title: string;
+  description: string;
+  actionLabel: string;
+}

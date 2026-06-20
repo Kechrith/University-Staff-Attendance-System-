@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Department Head Dashboard | AttendHub",
-  description: "University Staff Attendance Management System — Department Head Dashboard",
+  title: "Staff Attendance Dashboard | AttendHub",
+  description: "University Staff Attendance Management System",
 };
 
 export default function RootLayout({

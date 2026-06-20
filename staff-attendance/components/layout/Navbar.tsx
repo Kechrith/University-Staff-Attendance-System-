@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Bell, HelpCircle, LogOut, Menu, Moon, Search, Settings, Sun, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useAsyncData } from "@/hooks/use-async-data";
 import { useHasMounted } from "@/hooks/use-has-mounted";
-import { fetchCurrentUser, fetchNotifications } from "@/services/dashboardService";
+import { getRoleConfig, getRoleKey } from "@/lib/roles";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -32,15 +33,21 @@ interface NavbarProps {
 /**
  * Slim top bar: just search + bell / help / profile. The page title, date,
  * and primary actions live in `PageHeader` inside the content area instead.
+ * The signed-in user, notifications, and the Settings deep-link are all
+ * resolved from the URL's role segment (see `lib/roles.ts`).
  */
 export function Navbar({ onSearch }: NavbarProps) {
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const hasMounted = useHasMounted();
+  const router = useRouter();
+  const pathname = usePathname();
+  const roleKey = getRoleKey(pathname);
+  const role = getRoleConfig(pathname);
 
-  const { data: currentUser } = useAsyncData(fetchCurrentUser);
-  const { data: notifications } = useAsyncData(fetchNotifications);
+  const { data: currentUser } = useAsyncData(role.fetchCurrentUser, [roleKey]);
+  const { data: notifications } = useAsyncData(role.fetchNotifications, [roleKey]);
   const unreadCount = notifications?.filter((n) => !n.read).length ?? 0;
 
   return (
@@ -145,7 +152,7 @@ export function Navbar({ onSearch }: NavbarProps) {
             </DropdownMenuItem>
             <DropdownMenuItem
               render={
-                <Link href="/Department-Head/Settings">
+                <Link href={role.settingsHref}>
                   <Settings className="size-4" /> Settings
                 </Link>
               }
@@ -155,7 +162,7 @@ export function Navbar({ onSearch }: NavbarProps) {
               {hasMounted && resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">
+            <DropdownMenuItem variant="destructive" onClick={() => router.push("/")}>
               <LogOut className="size-4" /> Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

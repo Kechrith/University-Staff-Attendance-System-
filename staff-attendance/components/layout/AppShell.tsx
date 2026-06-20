@@ -1,13 +1,27 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
+import { isRolePath } from "@/lib/roles";
 
 /**
  * Top-level dashboard frame: a fixed sidebar on desktop (lg+) and a
  * sticky navbar above the scrollable content area. The sidebar collapses
  * into a Sheet on smaller screens (handled inside Navbar).
+ *
+ * Pages outside every role's folder (currently just the "/" role picker)
+ * render bare, without the sidebar/navbar — there's no signed-in role to
+ * show chrome for yet.
  */
 export function AppShell({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  if (!isRolePath(pathname)) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="flex min-h-screen bg-background">
       {/* Brand accent strip, always pinned above the rest of the chrome. */}

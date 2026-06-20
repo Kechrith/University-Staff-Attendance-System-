@@ -11,14 +11,16 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   }, [error]);
 
   return (
-    <Card className="rounded-2xl border-border/60 shadow-sm">
-      <CardContent>
-        <ErrorState
-          title="Something went wrong"
-          description="An unexpected error occurred while loading this page."
-          onRetry={reset}
-        />
-      </CardContent>
-    </Card>
+    <div className="flex min-h-[70vh] items-center justify-center p-6">
+      <Card className="w-full max-w-md rounded-2xl border-border/60 shadow-sm">
+        <CardContent>
+          <ErrorState
+            title="Something went wrong"
+            description="An unexpected error occurred while loading this page."
+            onRetry={reset}
+          />
+        </CardContent>
+      </Card>
+    </div>
   );
 }
