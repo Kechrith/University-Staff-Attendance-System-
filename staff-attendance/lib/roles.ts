@@ -3,6 +3,7 @@ import {
   CalendarClock,
   CalendarRange,
   ClipboardList,
+  Eye,
   FileBarChart,
   GraduationCap,
   LayoutDashboard,
@@ -15,7 +16,14 @@ import {
   fetchCurrentUser as fetchProgramCoordinatorCurrentUser,
   fetchNotifications as fetchProgramCoordinatorNotifications,
 } from "@/services/programCoordinatorService";
+<<<<<<< HEAD
 import { fetchCurrentUser as fetchLecturerCurrentUser, fetchNotifications as fetchLecturerNotifications } from "@/services/lecturerService";
+=======
+import {
+  fetchCurrentUser as fetchClassMonitorCurrentUser,
+  fetchNotifications as fetchClassMonitorNotifications,
+} from "@/services/classMonitorService";
+>>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
 
 export interface NavItem {
   label: string;
@@ -79,6 +87,7 @@ export const ROLES: Record<string, RoleConfig> = {
     fetchCurrentUser: fetchProgramCoordinatorCurrentUser,
     fetchNotifications: fetchProgramCoordinatorNotifications,
   },
+<<<<<<< HEAD
   Lecturer: {
     key: "Lecturer",
     label: "Lecturer",
@@ -94,6 +103,24 @@ export const ROLES: Record<string, RoleConfig> = {
     settingsHref: "/Lecturer/Settings",
     fetchCurrentUser: fetchLecturerCurrentUser,
     fetchNotifications: fetchLecturerNotifications,
+=======
+  "Class-Monitor": {
+    key: "Class-Monitor",
+    label: "Class Monitor",
+    description: "Track classroom attendance, lecturer check-ins, and room sessions.",
+    icon: Eye,
+    navItems: [
+      { label: "Dashboard", href: "/Class-Monitor/Dashboard", icon: LayoutDashboard },
+      { label: "Attendance", href: "/Class-Monitor/Attendance", icon: ClipboardList },
+      { label: "Leave Management", href: "/Class-Monitor/Leave-Management", icon: CalendarRange },
+      { label: "Schedule", href: "/Class-Monitor/Schedule", icon: CalendarClock },
+      { label: "Reports", href: "/Class-Monitor/Reports", icon: FileBarChart },
+      { label: "Settings", href: "/Class-Monitor/Settings", icon: Settings },
+    ],
+    settingsHref: "/Class-Monitor/Settings",
+    fetchCurrentUser: fetchClassMonitorCurrentUser,
+    fetchNotifications: fetchClassMonitorNotifications,
+>>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
   },
 };
 
