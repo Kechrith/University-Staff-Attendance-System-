@@ -4,6 +4,7 @@ import {
   CalendarRange,
   ClipboardList,
   FileBarChart,
+  GraduationCap,
   LayoutDashboard,
   Settings,
   type LucideIcon,
@@ -14,6 +15,7 @@ import {
   fetchCurrentUser as fetchProgramCoordinatorCurrentUser,
   fetchNotifications as fetchProgramCoordinatorNotifications,
 } from "@/services/programCoordinatorService";
+import { fetchCurrentUser as fetchLecturerCurrentUser, fetchNotifications as fetchLecturerNotifications } from "@/services/lecturerService";
 
 export interface NavItem {
   label: string;
@@ -76,6 +78,22 @@ export const ROLES: Record<string, RoleConfig> = {
     settingsHref: "/Program-Coordinator/Settings",
     fetchCurrentUser: fetchProgramCoordinatorCurrentUser,
     fetchNotifications: fetchProgramCoordinatorNotifications,
+  },
+  Lecturer: {
+    key: "Lecturer",
+    label: "Lecturer",
+    description: "Review your attendance records and lesson logs, and flag inaccuracies.",
+    icon: GraduationCap,
+    navItems: [
+      { label: "Dashboard", href: "/Lecturer/Dashboard", icon: LayoutDashboard },
+      { label: "My Records", href: "/Lecturer/My-Records", icon: ClipboardList },
+      { label: "Leave Requests", href: "/Lecturer/Leave-Requests", icon: CalendarRange },
+      { label: "My Schedule", href: "/Lecturer/My-Schedule", icon: CalendarClock },
+      { label: "Settings", href: "/Lecturer/Settings", icon: Settings },
+    ],
+    settingsHref: "/Lecturer/Settings",
+    fetchCurrentUser: fetchLecturerCurrentUser,
+    fetchNotifications: fetchLecturerNotifications,
   },
 };
 

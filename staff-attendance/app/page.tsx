@@ -24,6 +24,7 @@ const SHOW_QUICK_SIGN_IN = process.env.NODE_ENV !== "production";
 const TEST_CREDENTIALS: Record<string, { email: string; password: string }> = {
   "Department-Head": { email: "dept.head@rupp.edu.kh", password: "DeptHead123!" },
   "Program-Coordinator": { email: "coordinator@rupp.edu.kh", password: "Coord123!" },
+  Lecturer: { email: "lecturer@rupp.edu.kh", password: "Lecturer123!" },
 };
 
 /**
