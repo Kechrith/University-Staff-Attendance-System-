@@ -547,3 +547,177 @@ export interface CoordinatorSecurityItem {
   description: string;
   actionLabel: string;
 }
+
+/**
+ * Domain types for the Class Monitor pages: dashboard, attendance (mark
+ * attendance), leave management, schedule, reports, and settings. Kept
+ * separate from the other roles' types above even where shapes are similar,
+ * so this role's module can evolve independently.
+ */
+
+export type MonitorAlertTone = "warning" | "info";
+
+export interface MonitorAlert {
+  id: string;
+  title: string;
+  description: string;
+  tone: MonitorAlertTone;
+}
+
+export type MonitorAttendanceMark = "present" | "late" | "absent" | null;
+
+export interface MonitorDailyClassEntry {
+  id: string;
+  timeRangeLabel: string;
+  room: string;
+  lecturerName: string;
+  lecturerAvatar: string;
+  course: string;
+  mark: MonitorAttendanceMark;
+}
+
+export type MonitorAssignedClassTone = "active" | "upcoming" | "evening";
+
+export interface MonitorAssignedClass {
+  id: string;
+  groupLabel: string;
+  programLabel: string;
+  tone: MonitorAssignedClassTone;
+}
+
+export interface MonitorDutyStatus {
+  onDuty: boolean;
+  room: string;
+  sessionEndsInLabel: string;
+}
+
+export interface MonitorDashboardSummary {
+  alerts: MonitorAlert[];
+  dailyClasses: MonitorDailyClassEntry[];
+  assignedClasses: MonitorAssignedClass[];
+  duty: MonitorDutyStatus;
+}
+
+export interface MonitorShiftStats {
+  totalClassesToday: number;
+  totalRoomsLabel: string;
+  lecturerAttendanceRate: number;
+  lecturerAttendanceTrendLabel: string;
+  pendingRecords: number;
+}
+
+export type MonitorCurrentClassMark = "present" | "late" | "absent";
+
+export interface MonitorCurrentClass {
+  id: string;
+  room: string;
+  timeRangeLabel: string;
+  course: string;
+  lecturerName: string;
+  marks: MonitorCurrentClassMark[];
+}
+
+export interface MonitorSessionLogEntry {
+  id: string;
+  message: string;
+  detail: string;
+  timestamp: string;
+}
+
+export interface MonitorCampusLoad {
+  capacityPercentage: number;
+  updatedLabel: string;
+}
+
+export interface MonitorLeaveBalance {
+  type: "Annual" | "Sick" | "Other";
+  remaining: number;
+  total: number;
+}
+
+export interface MonitorLeaveStatus {
+  isOnDuty: boolean;
+  statusLabel: string;
+  nextScheduledLeaveLabel: string;
+}
+
+export interface MonitorLeaveRequest {
+  id: string;
+  leaveType: LeaveType;
+  startDate: string;
+  endDate: string;
+  duration: string;
+  reason: string;
+  status: "pending" | "approved" | "rejected";
+}
+
+export interface MonitorWeeklyScheduleEntry {
+  id: string;
+  day: WeekDay;
+  timeLabel: string;
+  title: string;
+  detail: string;
+  isToday?: boolean;
+  isLate?: boolean;
+}
+
+export interface MonitorScheduleSummary {
+  weekRangeLabel: string;
+  assignedLecturers: number;
+  activeMonitoringZones: number;
+  weeklyCoveragePercentage: number;
+}
+
+export interface MonitorReportKpis {
+  avgRecordingAccuracy: number;
+  avgRecordingAccuracyTrendLabel: string;
+  sessionCoverage: number;
+  sessionCoverageTrendLabel: string;
+  lateLogs: number;
+  lateLogsTrendLabel: string;
+  staffComplianceLabel: string;
+  staffComplianceGradeLabel: string;
+}
+
+export interface MonitorPerformanceTrendPoint {
+  monthLabel: string;
+  accuracy: number;
+}
+
+export type MonitorErrorDistributionType = "manual-overrides" | "missed-scans" | "sync-delays";
+
+export interface MonitorErrorDistributionDatum {
+  type: MonitorErrorDistributionType;
+  percentage: number;
+}
+
+export type MonitorDepartmentCoverageStatus = "optimal" | "warning";
+
+export interface MonitorDepartmentCoverageRow {
+  id: string;
+  department: string;
+  totalSessions: number;
+  recorded: number;
+  accuracyPercentage: number;
+  status: MonitorDepartmentCoverageStatus;
+}
+
+export interface MonitorProfile {
+  fullName: string;
+  monitoringUnit: string;
+  universityEmail: string;
+  employeeId: string;
+  bio: string;
+}
+
+export interface MonitorAccessSession {
+  lastLoginLabel: string;
+  checkInStatusLabel: string;
+}
+
+export interface MonitorNotificationPreference {
+  id: string;
+  title: string;
+  description: string;
+  enabled: boolean;
+}
