@@ -550,6 +550,7 @@ export interface CoordinatorSecurityItem {
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Domain types for the Lecturer pages: personal dashboard, attendance
  * records with the flag/dispute workflow (FR-4/FR-5), weekly schedule, and
  * settings. Kept separate from the other roles' types even where shapes are
@@ -649,6 +650,8 @@ export interface LecturerLeaveSummary {
 
 export interface LecturerLeaveRequest {
 =======
+=======
+>>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
  * Domain types for the Class Monitor pages: dashboard, attendance (mark
  * attendance), leave management, schedule, reports, and settings. Kept
  * separate from the other roles' types above even where shapes are similar,
@@ -742,6 +745,9 @@ export interface MonitorLeaveStatus {
 }
 
 export interface MonitorLeaveRequest {
+<<<<<<< HEAD
+>>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
+=======
 >>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
   id: string;
   leaveType: LeaveType;
@@ -751,9 +757,12 @@ export interface MonitorLeaveRequest {
   reason: string;
   status: "pending" | "approved" | "rejected";
 <<<<<<< HEAD
+<<<<<<< HEAD
   /** ISO timestamp; rendered as a relative label like "2 hours ago". */
   requestedAt: string;
 =======
+=======
+>>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
 }
 
 export interface MonitorWeeklyScheduleEntry {
@@ -825,5 +834,8 @@ export interface MonitorNotificationPreference {
   title: string;
   description: string;
   enabled: boolean;
+<<<<<<< HEAD
+>>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
+=======
 >>>>>>> 71f104520d9c19e097b9152d9a4d098e6859c6bc
 }
