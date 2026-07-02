@@ -549,6 +549,116 @@ export interface CoordinatorSecurityItem {
 }
 
 /**
+ * Domain types for the Lecturer pages: personal dashboard, attendance
+ * records with the flag/dispute workflow (FR-4/FR-5), weekly schedule, and
+ * settings. Kept separate from the other roles' types even where shapes are
+ * similar, so each role's module can evolve independently.
+ */
+
+export interface LecturerDashboardSummary {
+  attendanceRate: number;
+  attendanceRateTrendLabel: string;
+  classesThisMonth: number;
+  classesThisMonthTrendLabel: string;
+  lateCount: number;
+  pendingDisputes: number;
+}
+
+export type LecturerClassStatus = "upcoming" | "ongoing" | "completed";
+
+export interface LecturerTodayClass {
+  id: string;
+  course: string;
+  classCode: string;
+  timeSlotLabel: string;
+  room: string;
+  status: LecturerClassStatus;
+}
+
+export type LecturerRecordStatus = "present" | "late" | "absent";
+export type LecturerDisputeStatus = "none" | "flagged" | "resolved";
+
+export interface LecturerAttendanceRecord {
+  id: string;
+  /** ISO date string. */
+  date: string;
+  course: string;
+  classCode: string;
+  timeSlotLabel: string;
+  status: LecturerRecordStatus;
+  lessonSummary: string;
+  /** Name of the Class Monitor who logged this entry. */
+  loggedBy: string;
+  disputeStatus: LecturerDisputeStatus;
+  disputeReason?: string;
+}
+
+export type LecturerScheduleSlotStatus = "class" | "office-hours" | "meeting";
+
+export interface LecturerScheduleSlot {
+  id: string;
+  day: WeekDay;
+  /** Must match one of the grid's `timeSlots`. */
+  time: string;
+  title: string;
+  subtitle: string;
+  status: LecturerScheduleSlotStatus;
+}
+
+export interface LecturerWeeklyScheduleGrid {
+  weekRangeLabel: string;
+  timeSlots: string[];
+  slots: LecturerScheduleSlot[];
+}
+
+export interface LecturerProfile {
+  fullName: string;
+  position: string;
+  department: string;
+  universityEmail: string;
+  employeeId: string;
+  phone: string;
+  bio: string;
+}
+
+export interface LecturerAlertPreference {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface LecturerSecurityItem {
+  id: "password" | "2fa" | "login-history";
+  title: string;
+  description: string;
+  actionLabel: string;
+}
+
+export interface LecturerAccessSession {
+  lastLoginLabel: string;
+  notifyOnNewEntry: boolean;
+}
+
+export interface LecturerLeaveSummary {
+  remainingDays: number;
+  usedDays: number;
+  pendingCount: number;
+  approvedThisYear: number;
+}
+
+export interface LecturerLeaveRequest {
+  id: string;
+  leaveType: LeaveType;
+  startDate: string;
+  endDate: string;
+  duration: string;
+  reason: string;
+  status: "pending" | "approved" | "rejected";
+  /** ISO timestamp; rendered as a relative label like "2 hours ago". */
+  requestedAt: string;
+}
+
+/**
  * Domain types for the Class Monitor pages: dashboard, attendance (mark
  * attendance), leave management, schedule, reports, and settings. Kept
  * separate from the other roles' types above even where shapes are similar,
