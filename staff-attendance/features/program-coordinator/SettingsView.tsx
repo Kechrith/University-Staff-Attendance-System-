@@ -3,13 +3,14 @@ import { PersonalProfileCard } from "@/components/program-coordinator/settings/P
 import { CoordinatorAccessCard } from "@/components/program-coordinator/settings/CoordinatorAccessCard";
 import { CoordinationPoliciesCard } from "@/components/program-coordinator/settings/CoordinationPoliciesCard";
 import { AlertPreferencesCard } from "@/components/program-coordinator/settings/AlertPreferencesCard";
-import { SecurityAccessCard } from "@/components/program-coordinator/settings/SecurityAccessCard";
 import { CoordinatorSettingsActionBar } from "@/components/program-coordinator/settings/CoordinatorSettingsActionBar";
 
 /**
  * Page-level composition for the Program Coordinator Settings page: header,
  * profile paired with the access/duty-status panel, coordination policies
- * paired with alert preferences, security & access, and a bottom save bar.
+ * paired with alert preferences, and a bottom save bar. Dropped the generic
+ * Security & Access card (password/2FA/login history — not coordination-
+ * specific) to trim the page from 5 card sections to 4.
  */
 export function SettingsView() {
   return (
@@ -27,8 +28,6 @@ export function SettingsView() {
         <CoordinationPoliciesCard />
         <AlertPreferencesCard />
       </div>
-
-      <SecurityAccessCard />
 
       <CoordinatorSettingsActionBar />
     </div>

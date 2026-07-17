@@ -10,42 +10,48 @@ function delay<T>(value: T, ms = 300): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(structuredClone(value)), ms));
 }
 
-const EMPTY_PROFILE: DepartmentProfile = {
+const SAMPLE_PROFILE: DepartmentProfile = {
   // The department name mirrors the constant shown elsewhere in the app
   // (header subtitles, etc.) rather than an arbitrary placeholder.
   departmentName: DEPARTMENT_NAME,
-  deptCode: "",
-  establishedYear: "",
+  deptCode: "DSE-DEPT",
+  establishedYear: "1998",
   signatureUrl: null,
 };
 
-const EMPTY_ATTENDANCE_POLICY: AttendancePolicy = {
-  lateThresholdMinutes: 0,
+const SAMPLE_ATTENDANCE_POLICY: AttendancePolicy = {
+  lateThresholdMinutes: 15,
   gracePeriodMode: "fixed",
 };
 
-const EMPTY_LEAVE_APPROVAL_RULES: LeaveApprovalRules = {
+const SAMPLE_LEAVE_APPROVAL_RULES: LeaveApprovalRules = {
   autoApprovePersonalLeave: false,
-  mandatoryMedicalDocumentation: false,
-  escalationHierarchy: "",
+  mandatoryMedicalDocumentation: true,
+  escalationHierarchy: "Direct to Department Head",
 };
 
 // TODO: replace with `fetch('/api/settings/profile')`
 export async function fetchDepartmentProfile(): Promise<DepartmentProfile> {
-  return delay(EMPTY_PROFILE);
+  return delay(SAMPLE_PROFILE);
 }
 
 // TODO: replace with `fetch('/api/settings/attendance-policy')`
 export async function fetchAttendancePolicy(): Promise<AttendancePolicy> {
-  return delay(EMPTY_ATTENDANCE_POLICY);
+  return delay(SAMPLE_ATTENDANCE_POLICY);
 }
 
 // TODO: replace with `fetch('/api/settings/leave-approval-rules')`
 export async function fetchLeaveApprovalRules(): Promise<LeaveApprovalRules> {
-  return delay(EMPTY_LEAVE_APPROVAL_RULES);
+  return delay(SAMPLE_LEAVE_APPROVAL_RULES);
 }
 
 // TODO: replace with `fetch('/api/settings/staff')`
 export async function fetchDepartmentStaff(): Promise<DepartmentStaffMember[]> {
-  return delay([]);
+  return delay([
+    { id: "stf-6", name: "Hout Bunthoeun", avatar: "https://i.pravatar.cc/150?u=hout.bunthoeun", role: "Department Head" },
+    { id: "stf-5", name: "Chan Pisey", avatar: "https://i.pravatar.cc/150?u=chan.pisey", role: "Program Coordinator" },
+    { id: "stf-1", name: "Ly Sochea", avatar: "https://i.pravatar.cc/150?u=ly.sochea", role: "Lecturer" },
+    { id: "stf-2", name: "Vann Kimheng", avatar: "https://i.pravatar.cc/150?u=vann.kimheng", role: "Lecturer" },
+    { id: "stf-3", name: "Prum Sophea", avatar: "https://i.pravatar.cc/150?u=prum.sophea", role: "Class Monitor" },
+  ]);
 }

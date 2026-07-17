@@ -21,7 +21,7 @@ function TrendLegend() {
   return (
     <div className="flex items-center gap-4 text-xs text-muted-foreground">
       <span className="flex items-center gap-1.5">
-        <span className="size-2 rounded-full bg-primary" /> CS Department
+        <span className="size-2 rounded-full bg-primary" /> DSE Department
       </span>
       <span className="flex items-center gap-1.5">
         <span className="size-2 rounded-full bg-primary/25" /> Uni Average
@@ -50,7 +50,7 @@ export function AcademicPerformanceTrendChart() {
               <XAxis dataKey="yearLabel" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
               <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Bar dataKey="departmentValue" name="CS Department" fill="var(--color-primary)" radius={[6, 6, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="departmentValue" name="DSE Department" fill="var(--color-primary)" radius={[6, 6, 0, 0]} maxBarSize={40} />
               <Bar
                 dataKey="universityAverage"
                 name="Uni Average"

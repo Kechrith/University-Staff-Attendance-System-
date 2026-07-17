@@ -8,12 +8,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAsyncData } from "@/hooks/use-async-data";
 import { fetchProgramDistribution } from "@/services/programCoordinatorService";
 
-/** Attendance rate broken down by managed program (e.g. IT vs CS). */
+/** Attendance rate broken down by course, across the program's 4 DSE courses. */
 export function ProgramDistributionCard() {
   const { data, isLoading, error, refetch } = useAsyncData(fetchProgramDistribution);
 
   return (
-    <SectionCard title="Program Distribution">
+    <SectionCard title="Course Distribution">
       {error ? (
         <ErrorState onRetry={refetch} title="Couldn't load program distribution" />
       ) : isLoading || !data ? (

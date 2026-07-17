@@ -57,7 +57,7 @@ export function CoordinatorStatsCards() {
         icon={BookOpen}
         iconClassName="bg-primary/10 text-primary"
         trendLabel={data.managedProgramsGrowthLabel}
-        trendTone="success"
+        trendTone="muted"
       />
 
       <DashboardCard

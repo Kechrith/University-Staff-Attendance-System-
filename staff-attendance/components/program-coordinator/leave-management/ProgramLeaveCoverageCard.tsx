@@ -10,12 +10,12 @@ import { fetchProgramLeaveCoverage } from "@/services/programCoordinatorService"
 
 const BAR_COLORS = ["bg-primary", "bg-success", "bg-warning"];
 
-/** Present-rate bars per managed program, used to spot coverage gaps from leave. */
+/** Present-rate bars per course, used to spot coverage gaps from leave. */
 export function ProgramLeaveCoverageCard() {
   const { data, isLoading, error, refetch } = useAsyncData(fetchProgramLeaveCoverage);
 
   return (
-    <SectionCard title="Program Leave Coverage">
+    <SectionCard title="Course Leave Coverage">
       {error ? (
         <ErrorState onRetry={refetch} title="Couldn't load program coverage" />
       ) : isLoading || !data ? (

@@ -831,3 +831,135 @@ export interface MonitorNotificationPreference {
   description: string;
   enabled: boolean;
 }
+
+/**
+ * Domain types for the Super Admin pages: dashboard, user management,
+ * organization, timetable, disputes, audit log, settings.
+ */
+export interface SuperAdminDashboardSummary {
+  totalFaculties: number;
+  totalDepartments: number;
+  totalUserAccounts: number;
+  activeDisputes: number;
+  activeDisputesTrendLabel: string;
+  sessionsThisWeek: number;
+}
+
+export type SystemActivityTone = "success" | "warning" | "info";
+
+export interface SystemActivityItem {
+  id: string;
+  actor: string;
+  action: string;
+  timestamp: string;
+  tone: SystemActivityTone;
+}
+
+export type UserAccountRole = "Department-Head" | "Program-Coordinator" | "Lecturer" | "Class-Monitor" | "Super-Admin";
+
+export type UserAccountStatus = "active" | "suspended" | "pending";
+
+export interface UserAccountRow {
+  id: string;
+  name: string;
+  email: string;
+  role: UserAccountRole;
+  department: string;
+  status: UserAccountStatus;
+}
+
+export interface ClassMonitorAssignmentRow {
+  id: string;
+  className: string;
+  department: string;
+  currentMonitor: string | null;
+  status: "assigned" | "unassigned";
+}
+
+export type OrgUnitType = "faculty" | "department" | "center" | "class";
+
+export interface OrgUnitNode {
+  id: string;
+  name: string;
+  type: OrgUnitType;
+  children: OrgUnitNode[];
+}
+
+export interface OrgStats {
+  facultyCount: number;
+  departmentCount: number;
+  centerCount: number;
+  classCount: number;
+}
+
+export interface SuperAdminTimetableSlot {
+  day: string;
+  time: string;
+  courseLabel: string;
+  lecturerLabel: string;
+  roomLabel: string;
+}
+
+export interface SuperAdminTimetableGrid {
+  semesterLabel: string;
+  timeSlots: string[];
+  slots: SuperAdminTimetableSlot[];
+}
+
+export type TimetableChangeType = "added" | "moved" | "cancelled";
+
+export interface TimetableChangeEntry {
+  id: string;
+  description: string;
+  changeType: TimetableChangeType;
+  timestamp: string;
+}
+
+export type DisputeStatus = "escalated" | "in-review" | "resolved";
+
+export interface EscalatedDisputeEntry {
+  id: string;
+  subject: string;
+  raisedBy: string;
+  department: string;
+  status: DisputeStatus;
+  daysOpen: number;
+}
+
+export interface DisputeStats {
+  openCount: number;
+  resolvedThisMonth: number;
+  overdueCount: number;
+}
+
+export type AuditLogActionType = "create" | "update" | "delete" | "login" | "export";
+
+export interface AuditLogEntry {
+  id: string;
+  actor: string;
+  actorRole: string;
+  action: AuditLogActionType;
+  target: string;
+  timestamp: string;
+}
+
+export interface SuperAdminProfile {
+  fullName: string;
+  universityEmail: string;
+  employeeId: string;
+  bio: string;
+}
+
+export interface SystemConfiguration {
+  attendanceWindowMinutes: number;
+  disputeWindowDays: number;
+  digestScheduleLabel: string;
+  digestEnabled: boolean;
+}
+
+export interface SuperAdminSecurityItem {
+  id: string;
+  title: string;
+  description: string;
+  enabled: boolean;
+}

@@ -4,8 +4,6 @@ import { useState } from "react";
 import { ReportsHeader } from "@/components/reports/ReportsHeader";
 import { AttendanceTrendsCard } from "@/components/reports/AttendanceTrendsCard";
 import { LeaveDistributionCard } from "@/components/reports/LeaveDistributionCard";
-import { StaffWorkloadIntensityCard } from "@/components/reports/StaffWorkloadIntensityCard";
-import { CustomReportBuilder } from "@/components/reports/CustomReportBuilder";
 import { RecentReportsTable } from "@/components/reports/RecentReportsTable";
 import { ReportsFooterNote } from "@/components/reports/ReportsFooterNote";
 import type { ReportRange } from "@/types";
@@ -15,6 +13,13 @@ import type { ReportRange } from "@/types";
  * Unlike the other feature views this one is a Client Component: the
  * Weekly/Monthly/Quarterly toggle lives in the header but drives the
  * Attendance Trends chart below it, so the two need to share `range` state.
+ *
+ * Kept to 3 major sections (trends+leave row, recent reports, footer) for a
+ * small single-department roster — the workload-intensity heatmap and
+ * custom report builder were dropped as redundant/low-value clutter (the
+ * Schedule page's Staff Workload Finder already covers per-person workload,
+ * and the header's "Export Detailed Report" plus the footer's "New Report"
+ * action already cover ad-hoc export).
  */
 export function ReportsView() {
   const [range, setRange] = useState<ReportRange>("weekly");
@@ -29,10 +34,6 @@ export function ReportsView() {
         </div>
         <LeaveDistributionCard />
       </div>
-
-      <StaffWorkloadIntensityCard />
-
-      <CustomReportBuilder />
 
       <RecentReportsTable />
 

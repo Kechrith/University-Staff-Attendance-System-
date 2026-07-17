@@ -15,9 +15,10 @@ import { fetchDepartmentStaff } from "@/services/settingsService";
 import { cn } from "@/lib/utils";
 
 const ROLE_BADGE_STYLES: Record<string, string> = {
-  Professor: "bg-warning/10 text-warning border-warning/30",
-  "Admin Assistant": "bg-warning/10 text-warning border-warning/30",
+  "Department Head": "bg-primary/10 text-primary border-primary/30",
+  "Program Coordinator": "bg-info/10 text-info border-info/30",
   Lecturer: "bg-muted text-muted-foreground border-border",
+  "Class Monitor": "bg-warning/10 text-warning border-warning/30",
 };
 const DEFAULT_ROLE_STYLE = "bg-muted text-muted-foreground border-border";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
@@ -10,7 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BRAND } from "@/lib/constants";
-import { ROLES } from "@/lib/roles";
+import { ROLES, type RoleConfig } from "@/lib/roles";
+import { login } from "@/services/superAdminService";
 
 /** Dead-code-eliminated in production builds — test credentials and quick-login shortcuts only exist for local testing. */
 const SHOW_QUICK_SIGN_IN = process.env.NODE_ENV !== "production";
@@ -25,6 +25,8 @@ const TEST_CREDENTIALS: Record<string, { email: string; password: string }> = {
   "Department-Head": { email: "dept.head@rupp.edu.kh", password: "DeptHead123!" },
   "Program-Coordinator": { email: "coordinator@rupp.edu.kh", password: "Coord123!" },
   Lecturer: { email: "lecturer@rupp.edu.kh", password: "Lecturer123!" },
+  "Class-Monitor": { email: "monitor@rupp.edu.kh", password: "Monitor123!" },
+  "Super-Admin": { email: "superadmin@rupp.edu.kh", password: "SuperAdmin123!" },
 };
 
 /**
@@ -41,16 +43,40 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const roles = Object.values(ROLES);
 
-  function handleSignIn() {
+  /**
+   * Super Admin is wired to the real backend (see `services/superAdminService.ts`)
+   * — signing in as that role authenticates for real. Every other role is
+   * still frontend-only, so they keep matching against `TEST_CREDENTIALS`
+   * locally until their own backend routes exist.
+   */
+  async function enterRole(role: RoleConfig) {
+    if (role.key === "Super-Admin") {
+      const creds = TEST_CREDENTIALS[role.key];
+      setSigningIn(true);
+      try {
+        await login(creds.email, creds.password);
+        router.push(role.navItems[0].href);
+      } catch {
+        toast.error("Sign in failed", { description: "Couldn't reach the backend — is it running?" });
+      } finally {
+        setSigningIn(false);
+      }
+      return;
+    }
+    router.push(role.navItems[0].href);
+  }
+
+  async function handleSignIn() {
     if (SHOW_QUICK_SIGN_IN) {
       const matchedRole = roles.find((role) => {
         const creds = TEST_CREDENTIALS[role.key];
         return creds && creds.email === email && creds.password === password;
       });
       if (matchedRole) {
-        router.push(matchedRole.navItems[0].href);
+        await enterRole(matchedRole);
         return;
       }
     }
@@ -66,12 +92,14 @@ export default function LoginPage() {
       <div className="w-full max-w-sm space-y-6">
         <Card className="rounded-2xl border-border/60 shadow-xl">
           <CardContent className="space-y-5 p-6">
-            <div className="flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element -- static raster logo, no benefit from next/image's optimizer */}
-              <img src="/logo/logo&title_login.png" alt={`${BRAND.name} logo`} className="h-16 w-auto rounded-xl" />
+            <div className="flex items-center justify-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element -- static svg logo, no benefit from next/image's optimizer */}
+              <img src="/logo/rupp_logo.svg" alt={`${BRAND.name} seal`} className="h-10 w-10 shrink-0" />
+              {/* eslint-disable-next-line @next/next/no-img-element -- static svg wordmark, no benefit from next/image's optimizer */}
+              <img src="/logo/word-rupp.svg" alt="Royal University of Phnom Penh" className="h-10 w-auto" />
             </div>
 
-            <h1 className="text-center text-xl font-bold tracking-tight text-foreground">Sign in</h1>
+            <h1 className="text-center text-2xl font-bold tracking-tight text-foreground">Sign in</h1>
 
             <div className="space-y-4">
               <div className="space-y-1.5">
@@ -121,8 +149,12 @@ export default function LoginPage() {
                 Remember me
               </label>
 
-              <Button className="w-full bg-emerald-600 text-white hover:bg-emerald-500" onClick={handleSignIn}>
-                Sign in
+              <Button
+                className="w-full bg-emerald-600 text-white hover:bg-emerald-500"
+                onClick={handleSignIn}
+                disabled={signingIn}
+              >
+                {signingIn ? "Signing in…" : "Sign in"}
               </Button>
             </div>
           </CardContent>
@@ -140,12 +172,14 @@ export default function LoginPage() {
                   const creds = TEST_CREDENTIALS[role.key];
                   return (
                     <div key={role.key} className="space-y-1">
-                      <Link
-                        href={role.navItems[0].href}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                      <button
+                        type="button"
+                        onClick={() => enterRole(role)}
+                        disabled={signingIn}
+                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-60"
                       >
                         <Icon className="size-4" /> Continue as {role.label}
-                      </Link>
+                      </button>
                       {creds ? (
                         <p className="text-center font-mono text-[11px] text-muted-foreground">
                           {creds.email} / {creds.password}

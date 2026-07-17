@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, CalendarCheck, Hourglass, Target } from "lucide-react";
+import { CalendarCheck, Hourglass, Target } from "lucide-react";
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,8 +41,8 @@ export function MonitorKpiCards() {
 
   if (isLoading || !data) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, i) => (
           <CardSkeleton key={i} />
         ))}
       </div>
@@ -50,7 +50,7 @@ export function MonitorKpiCards() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <DashboardCard
         title="Avg. Recording Accuracy"
         value={`${data.avgRecordingAccuracy}%`}
@@ -76,15 +76,6 @@ export function MonitorKpiCards() {
         iconClassName="bg-warning/10 text-warning"
         trendLabel={data.lateLogsTrendLabel}
         trendTone="warning"
-      />
-
-      <DashboardCard
-        title="Staff Compliance"
-        value={data.staffComplianceLabel}
-        icon={Award}
-        iconClassName="bg-info/10 text-info"
-        trendLabel={data.staffComplianceGradeLabel}
-        trendTone="success"
       />
     </div>
   );

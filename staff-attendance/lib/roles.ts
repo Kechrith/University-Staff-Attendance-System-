@@ -5,9 +5,14 @@ import {
   ClipboardList,
   Eye,
   FileBarChart,
+  Gavel,
   GraduationCap,
   LayoutDashboard,
+  Network,
+  ScrollText,
   Settings,
+  ShieldCheck,
+  UserCog,
   type LucideIcon,
 } from "lucide-react";
 import type { CurrentUser, NotificationItem } from "@/types";
@@ -21,6 +26,10 @@ import {
   fetchCurrentUser as fetchClassMonitorCurrentUser,
   fetchNotifications as fetchClassMonitorNotifications,
 } from "@/services/classMonitorService";
+import {
+  fetchCurrentUser as fetchSuperAdminCurrentUser,
+  fetchNotifications as fetchSuperAdminNotifications,
+} from "@/services/superAdminService";
 
 export interface NavItem {
   label: string;
@@ -116,6 +125,24 @@ export const ROLES: Record<string, RoleConfig> = {
     settingsHref: "/Class-Monitor/Settings",
     fetchCurrentUser: fetchClassMonitorCurrentUser,
     fetchNotifications: fetchClassMonitorNotifications,
+  },
+  "Super-Admin": {
+    key: "Super-Admin",
+    label: "Super Admin",
+    description: "Administer the university-wide org hierarchy, timetables, accounts, and disputes.",
+    icon: ShieldCheck,
+    navItems: [
+      { label: "Dashboard", href: "/Super-Admin/Dashboard", icon: LayoutDashboard },
+      { label: "User Management", href: "/Super-Admin/User-Management", icon: UserCog },
+      { label: "Organization", href: "/Super-Admin/Organization", icon: Network },
+      { label: "Timetable", href: "/Super-Admin/Timetable", icon: CalendarClock },
+      { label: "Disputes", href: "/Super-Admin/Disputes", icon: Gavel },
+      { label: "Audit Log", href: "/Super-Admin/Audit-Log", icon: ScrollText },
+      { label: "Settings", href: "/Super-Admin/Settings", icon: Settings },
+    ],
+    settingsHref: "/Super-Admin/Settings",
+    fetchCurrentUser: fetchSuperAdminCurrentUser,
+    fetchNotifications: fetchSuperAdminNotifications,
   },
 };
 

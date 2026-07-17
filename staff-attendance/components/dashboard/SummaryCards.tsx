@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarOff, CheckCircle2, Clock, Users } from "lucide-react";
+import { CalendarOff, CheckCircle2, Users } from "lucide-react";
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,8 +40,8 @@ export function SummaryCards() {
 
   if (isLoading || !data) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, i) => (
           <CardSkeleton key={i} />
         ))}
       </div>
@@ -49,7 +49,7 @@ export function SummaryCards() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <DashboardCard
         title="Total Staff"
         value={data.totalStaff}
@@ -75,15 +75,6 @@ export function SummaryCards() {
         iconClassName="bg-info/10 text-info"
         trendLabel={`${data.pendingLeave} Pending`}
         trendTone="warning"
-      />
-
-      <DashboardCard
-        title="Late Arrivals"
-        value={data.lateArrivals}
-        icon={Clock}
-        iconClassName="bg-warning/10 text-warning"
-        trendLabel={data.lateArrivalsAlert ? "High Alert" : "Normal"}
-        trendTone={data.lateArrivalsAlert ? "danger" : "success"}
       />
     </div>
   );

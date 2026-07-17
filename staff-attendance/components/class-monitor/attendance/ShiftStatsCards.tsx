@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
-import { CalendarCheck, ClipboardCheck, Hourglass, TrendingUp } from "lucide-react";
+import { CalendarCheck, Hourglass, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ErrorState } from "@/components/shared/ErrorState";
@@ -36,8 +36,8 @@ export function ShiftStatsCards() {
 
   if (isLoading || !data) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, i) => (
           <StatSkeleton key={i} />
         ))}
       </div>
@@ -45,7 +45,7 @@ export function ShiftStatsCards() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <Card className="rounded-xl border-border/60 shadow-sm">
         <CardContent className="space-y-1.5 p-5">
           <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -67,26 +67,18 @@ export function ShiftStatsCards() {
       </Card>
 
       <Card className="rounded-xl border-border/60 shadow-sm">
-        <CardContent className="space-y-1.5 p-5">
+        <CardContent className="space-y-2 p-5">
           <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             <Hourglass className="size-3.5" /> Pending Records
           </span>
           <p className="text-2xl font-bold tracking-tight text-destructive">{data.pendingRecords}</p>
-          <p className="text-xs text-muted-foreground">Action required</p>
-        </CardContent>
-      </Card>
-
-      <Card className="flex items-center rounded-xl border-border/60 bg-primary shadow-sm">
-        <CardContent className="flex w-full flex-col gap-2 p-5">
-          <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary-foreground/80">
-            <ClipboardCheck className="size-3.5" /> Moderator Action
-          </span>
           <Button
-            variant="secondary"
-            className="w-full"
+            variant="link"
+            size="sm"
+            className="h-auto p-0 text-primary"
             onClick={() => toast.success("All records finalized", { description: "Today's attendance has been locked in." })}
           >
-            Finalize All
+            Finalize All →
           </Button>
         </CardContent>
       </Card>

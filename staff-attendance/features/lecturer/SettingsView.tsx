@@ -1,14 +1,15 @@
 import { LecturerSettingsHeader } from "@/components/lecturer/settings/LecturerSettingsHeader";
 import { LecturerProfileCard } from "@/components/lecturer/settings/LecturerProfileCard";
 import { LecturerAccessCard } from "@/components/lecturer/settings/LecturerAccessCard";
-import { LecturerAlertPreferencesCard } from "@/components/lecturer/settings/LecturerAlertPreferencesCard";
 import { LecturerSecurityCard } from "@/components/lecturer/settings/LecturerSecurityCard";
 import { LecturerSettingsActionBar } from "@/components/lecturer/settings/LecturerSettingsActionBar";
 
 /**
  * Page-level composition for the Lecturer Settings page: header, profile
- * paired with the access/notification panel, alert preferences, security &
- * access, and a bottom save bar.
+ * paired with the merged notifications/access panel, security & access, and
+ * a bottom save bar. (Notification preferences live inside
+ * `LecturerAccessCard` alongside the session info — see that component for
+ * why they were merged.)
  */
 export function SettingsView() {
   return (
@@ -21,8 +22,6 @@ export function SettingsView() {
         </div>
         <LecturerAccessCard />
       </div>
-
-      <LecturerAlertPreferencesCard />
 
       <LecturerSecurityCard />
 

@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  DEPARTMENT_HEAD
+  PROGRAM_COORDINATOR
+  LECTURER
+  CLASS_MONITOR
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING
+}
+
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  ABSENT
+}
+
+enum DisputeStatus {
+  FLAGGED
+  ESCALATED
+  IN_REVIEW
+  RESOLVED
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  EXPORT
+}
+
+model Faculty {
+  id          String       @id @default(cuid())
+  name        String
+  departments Department[]
+  centers     Center[]
+  createdAt   DateTime     @default(now())
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String
+  faculty   Faculty  @relation(fields: [facultyId], references: [id])
+  facultyId String
+  classes   Class[]
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
+model Center {
+  id        String   @id @default(cuid())
+  name      String
+  faculty   Faculty  @relation(fields: [facultyId], references: [id])
+  facultyId String
+  createdAt DateTime @default(now())
+}
+
+model Class {
+  id           String         @id @default(cuid())
+  code         String         @unique
+  name         String
+  department   Department     @relation(fields: [departmentId], references: [id])
+  departmentId String
+  monitor      User?          @relation("ClassMonitorAssignment", fields: [monitorId], references: [id])
+  monitorId    String?
+  sessions     ClassSession[]
+  createdAt    DateTime       @default(now())
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  role         Role
+  department   Department?   @relation(fields: [departmentId], references: [id])
+  departmentId String?
+  status       AccountStatus @default(ACTIVE)
+  employeeId   String?
+  phone        String?
+  bio          String?
+  avatarUrl    String?
+  position     String?
+
+  monitoredClasses  Class[]            @relation("ClassMonitorAssignment")
+  taughtSessions    ClassSession[]     @relation("LecturerSessions")
+  loggedAttendance  AttendanceRecord[] @relation("LoggedByMonitor")
+  leaveRequests     LeaveRequest[]
+  disputesRaised    Dispute[]          @relation("DisputeRaisedBy")
+  auditLogEntries   AuditLogEntry[]
+  notifications     Notification[]
+
+  createdAt DateTime @default(now())
+}
+
+model ClassSession {
+  id            String   @id @default(cuid())
+  class         Class    @relation(fields: [classId], references: [id])
+  classId       String
+  lecturer      User     @relation("LecturerSessions", fields: [lecturerId], references: [id])
+  lecturerId    String
+  dayOfWeek     String
+  startTime     String
+  endTime       String
+  room          String
+  semesterLabel String
+
+  attendanceRecords AttendanceRecord[]
+  createdAt         DateTime           @default(now())
+}
+
+model AttendanceRecord {
+  id            String            @id @default(cuid())
+  session       ClassSession      @relation(fields: [sessionId], references: [id])
+  sessionId     String
+  date          DateTime
+  status        AttendanceStatus
+  lessonSummary String?
+  loggedBy      User              @relation("LoggedByMonitor", fields: [loggedById], references: [id])
+  loggedById    String
+  dispute       Dispute?
+  createdAt     DateTime          @default(now())
+}
+
+model Dispute {
+  id                  String            @id @default(cuid())
+  attendanceRecord    AttendanceRecord  @relation(fields: [attendanceRecordId], references: [id])
+  attendanceRecordId  String            @unique
+  raisedBy            User              @relation("DisputeRaisedBy", fields: [raisedById], references: [id])
+  raisedById          String
+  reason              String
+  status              DisputeStatus     @default(FLAGGED)
+  coordinatorDecision String?
+  createdAt           DateTime          @default(now())
+  resolvedAt          DateTime?
+}
+
+model LeaveRequest {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  leaveType   String
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      LeaveStatus @default(PENDING)
+  requestedAt DateTime    @default(now())
+  decidedAt   DateTime?
+  decidedBy   String?
+}
+
+model AuditLogEntry {
+  id        String      @id @default(cuid())
+  actor     User        @relation(fields: [actorId], references: [id])
+  actorId   String
+  action    AuditAction
+  target    String
+  timestamp DateTime    @default(now())
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  title       String
+  description String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model SystemConfiguration {
+  id                      Int      @id @default(1)
+  attendanceWindowMinutes Int      @default(60)
+  disputeWindowDays       Int      @default(7)
+  digestScheduleLabel     String   @default("Every Monday at 9:00 AM")
+  digestEnabled           Boolean  @default(true)
+  updatedAt               DateTime @updatedAt
+}

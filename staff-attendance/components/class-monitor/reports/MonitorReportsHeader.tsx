@@ -10,7 +10,7 @@ export function MonitorReportsHeader() {
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Attendance Analytics</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Recording accuracy and coverage across your monitored departments.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Recording accuracy and coverage for DSE-301, Department of Data Science and Engineering.</p>
       </div>
 
       <Button onClick={() => toast.success("Export started", { description: "Preparing your analytics export…" })}>

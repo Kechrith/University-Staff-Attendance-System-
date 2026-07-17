@@ -51,22 +51,14 @@ export function TodaysFocusCard() {
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary-foreground/70">Filter Attendance</p>
           <Select onValueChange={() => toast.message("Filter applied", { description: "Available once filtering is connected." })}>
-            <SelectTrigger className="w-full border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground" aria-label="Select department">
-              <SelectValue>{() => "Select Department"}</SelectValue>
+            <SelectTrigger className="w-full border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground" aria-label="Select course">
+              <SelectValue>{() => "Select Course"}</SelectValue>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="it">Information Technology</SelectItem>
-              <SelectItem value="cs">Computer Science</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select onValueChange={() => toast.message("Filter applied", { description: "Available once filtering is connected." })}>
-            <SelectTrigger className="w-full border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground" aria-label="Select class year">
-              <SelectValue>{() => "All Class Years"}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Class Years</SelectItem>
-              <SelectItem value="year1">Year 1</SelectItem>
-              <SelectItem value="year2">Year 2</SelectItem>
+              <SelectItem value="dse-101">DSE-101 Intro to Data Science</SelectItem>
+              <SelectItem value="dse-204">DSE-204 Data Structures</SelectItem>
+              <SelectItem value="dse-205">DSE-205 Machine Learning Basics</SelectItem>
+              <SelectItem value="dse-301">DSE-301 Software Engineering for Data Systems</SelectItem>
             </SelectContent>
           </Select>
         </div>

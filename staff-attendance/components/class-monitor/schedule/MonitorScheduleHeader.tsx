@@ -20,7 +20,7 @@ export function MonitorScheduleHeader({ weekOffset, onWeekOffsetChange }: Monito
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Weekly Monitoring Schedule</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Managing attendance for Faculty of Engineering &amp; Science</p>
+        <p className="mt-1 text-sm text-muted-foreground">Managing attendance for Department of Data Science and Engineering, Faculty of Engineering</p>
       </div>
 
       <div className="flex items-center gap-1 rounded-lg border border-border/60 px-1">

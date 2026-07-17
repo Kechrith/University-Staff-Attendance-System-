@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   devIndicators: {
     position: "bottom-right",
   },
+  // A stray lockfile one directory up makes Next.js infer the workspace root
+  // as the parent folder, which then has Turbopack watch that entire tree.
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 export default nextConfig;

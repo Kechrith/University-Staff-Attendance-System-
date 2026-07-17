@@ -8,7 +8,6 @@ import { ErrorState } from "@/components/shared/ErrorState";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAsyncData } from "@/hooks/use-async-data";
 import { fetchDepartmentCoverage } from "@/services/classMonitorService";
@@ -25,40 +24,28 @@ const STATUS_LABEL: Record<MonitorDepartmentCoverageStatus, string> = {
   warning: "Warning",
 };
 
-/** The "Departmental Coverage Details" table: sessions recorded vs. total, with an accuracy/status column. */
+/** The "Weekly Coverage Trend" table for the Data Science and Engineering department: sessions recorded vs. total, with an accuracy/status column. */
 export function DepartmentalCoverageTable() {
   const { data, isLoading, error, refetch } = useAsyncData(fetchDepartmentCoverage);
 
   return (
-    <SectionCard
-      title="Departmental Coverage Details"
-      action={
-        <Select defaultValue="all">
-          <SelectTrigger className="w-40" size="sm">
-            <SelectValue placeholder="All Faculties" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Faculties</SelectItem>
-          </SelectContent>
-        </Select>
-      }
-    >
+    <SectionCard title="Weekly Coverage Trend" description="Data Science and Engineering">
       {error ? (
-        <ErrorState onRetry={refetch} title="Couldn't load departmental coverage" />
+        <ErrorState onRetry={refetch} title="Couldn't load coverage trend" />
       ) : isLoading || !data ? (
         <div className="space-y-2">
-          {Array.from({ length: 4 }).map((_, i) => (
+          {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} className="h-12 w-full rounded-lg" />
           ))}
         </div>
       ) : data.length === 0 ? (
-        <EmptyState icon={Building2} title="No coverage data yet" description="Departmental coverage will appear here once recorded." />
+        <EmptyState icon={Building2} title="No coverage data yet" description="Weekly coverage will appear here once recorded." />
       ) : (
         <div className="overflow-x-auto rounded-lg border border-border/60">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40">
-                <TableHead>Department</TableHead>
+                <TableHead>Week</TableHead>
                 <TableHead>Total Sessions</TableHead>
                 <TableHead>Recorded</TableHead>
                 <TableHead>Accuracy</TableHead>
