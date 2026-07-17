@@ -69,6 +69,8 @@ function DisputeSheet({ record, onSubmitted }: DisputeSheetProps) {
       toast.success("Dispute submitted", { description: "Your Program Coordinator will review this entry." });
       setOpen(false);
       setReason("");
+    } catch {
+      toast.error("Couldn't submit dispute", { description: "Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -210,9 +212,10 @@ export function AttendanceRecordsList() {
                 {record.disputeStatus === "none" ? (
                   <DisputeSheet
                     record={record}
-                    onSubmitted={(reason) =>
-                      setOverrides((prev) => ({ ...prev, [record.id]: { disputeStatus: "flagged", disputeReason: reason } }))
-                    }
+                    onSubmitted={(reason) => {
+                      setOverrides((prev) => ({ ...prev, [record.id]: { disputeStatus: "flagged", disputeReason: reason } }));
+                      void refetch();
+                    }}
                   />
                 ) : null}
               </div>

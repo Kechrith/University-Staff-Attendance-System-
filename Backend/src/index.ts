@@ -5,6 +5,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { authRouter } from "./routes/auth.js";
 import { superAdminRouter } from "./routes/superAdmin.js";
+import { departmentHeadRouter } from "./routes/departmentHead.js";
+import { programCoordinatorRouter } from "./routes/programCoordinator.js";
+import { lecturerRouter } from "./routes/lecturer.js";
+import { classMonitorRouter } from "./routes/classMonitor.js";
 
 const app = express();
 const port = Number(process.env.PORT ?? 4000);
@@ -17,6 +21,10 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 
 app.use("/api", authRouter);
 app.use("/api/super-admin", superAdminRouter);
+app.use("/api/department-head", departmentHeadRouter);
+app.use("/api/program-coordinator", programCoordinatorRouter);
+app.use("/api/lecturer", lecturerRouter);
+app.use("/api/class-monitor", classMonitorRouter);
 
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err);

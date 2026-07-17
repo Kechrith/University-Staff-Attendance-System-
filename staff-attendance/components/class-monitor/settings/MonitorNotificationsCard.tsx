@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupIndicator, RadioGroupItem } from "@/components/ui
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { useAsyncData } from "@/hooks/use-async-data";
-import { fetchNotificationPreferences } from "@/services/classMonitorService";
+import { fetchNotificationPreferences, updateNotificationPreference } from "@/services/classMonitorService";
 
 type Channel = "email" | "push" | "sms";
 
@@ -48,7 +48,12 @@ export function MonitorNotificationsCard() {
                   checked={enabled[item.id] ?? item.enabled}
                   onCheckedChange={(checked) => {
                     setEnabled((prev) => ({ ...prev, [item.id]: checked }));
-                    toast.success(`${item.title} ${checked ? "enabled" : "disabled"}`);
+                    updateNotificationPreference(item.id, checked)
+                      .then(() => toast.success(`${item.title} ${checked ? "enabled" : "disabled"}`))
+                      .catch(() => {
+                        setEnabled((prev) => ({ ...prev, [item.id]: !checked }));
+                        toast.error(`Couldn't update ${item.title}`);
+                      });
                   }}
                   aria-label={item.title}
                 />

@@ -64,6 +64,29 @@ model Department {
   classes   Class[]
   users     User[]
   createdAt DateTime @default(now())
+
+  // Profile (Department-Head Settings)
+  deptCode        String? @default("DSE-DEPT")
+  establishedYear String? @default("1998")
+  signatureUrl    String?
+
+  // Attendance policy (Department-Head Settings)
+  lateThresholdMinutes Int    @default(15)
+  gracePeriodMode      String @default("fixed")
+
+  // Leave approval rules (Department-Head Settings)
+  autoApprovePersonalLeave       Boolean @default(false)
+  mandatoryMedicalDocumentation  Boolean @default(true)
+  escalationHierarchy            String  @default("Direct to Department Head")
+
+  // Coordination policies (Program-Coordinator Settings)
+  autoScheduleConflictDetection Boolean @default(true)
+  leaveRequestEscalationEnabled Boolean @default(true)
+  auditLogVisibility            Boolean @default(false)
+
+  rooms            Room[]
+  calendarEvents   CalendarEvent[]
+  generatedReports GeneratedReport[]
 }
 
 model Center {
@@ -78,6 +101,7 @@ model Class {
   id           String         @id @default(cuid())
   code         String         @unique
   name         String
+  studentCount Int            @default(30)
   department   Department     @relation(fields: [departmentId], references: [id])
   departmentId String
   monitor      User?          @relation("ClassMonitorAssignment", fields: [monitorId], references: [id])
@@ -100,6 +124,7 @@ model User {
   bio          String?
   avatarUrl    String?
   position     String?
+  notifyOnNewLogin Boolean @default(true)
 
   monitoredClasses  Class[]            @relation("ClassMonitorAssignment")
   taughtSessions    ClassSession[]     @relation("LecturerSessions")
@@ -108,6 +133,7 @@ model User {
   disputesRaised    Dispute[]          @relation("DisputeRaisedBy")
   auditLogEntries   AuditLogEntry[]
   notifications     Notification[]
+  notificationPreferences NotificationPreference[]
 
   createdAt DateTime @default(now())
 }
@@ -185,6 +211,49 @@ model Notification {
   description String
   read        Boolean  @default(false)
   createdAt   DateTime @default(now())
+}
+
+model NotificationPreference {
+  id          String  @id @default(cuid())
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String
+  key         String
+  title       String
+  description String
+  enabled     Boolean @default(true)
+
+  @@unique([userId, key])
+}
+
+model Room {
+  id           String     @id @default(cuid())
+  name         String
+  capacity     Int
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  createdAt    DateTime   @default(now())
+}
+
+model CalendarEvent {
+  id           String     @id @default(cuid())
+  title        String
+  type         String
+  date         DateTime
+  time         String
+  location     String
+  priority     String
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  createdAt    DateTime   @default(now())
+}
+
+model GeneratedReport {
+  id           String     @id @default(cuid())
+  name         String
+  format       String
+  generatedAt  DateTime   @default(now())
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
 }
 
 model SystemConfiguration {

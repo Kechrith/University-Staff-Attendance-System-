@@ -21,7 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAsyncData } from "@/hooks/use-async-data";
-import { fetchAllLeaveRequests } from "@/services/leaveManagementService";
+import { fetchAllLeaveRequests, updateLeaveRequestStatus } from "@/services/leaveManagementService";
 import type { LeaveRequest, LeaveType } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -69,17 +69,12 @@ function formatDateRange(startIso: string, endIso: string): string {
 /** The "Pending / Approved / Rejected" tabbed table that drives leave approvals for the department. */
 export function LeaveRequestsPanel() {
   const { data, isLoading, error, refetch } = useAsyncData(fetchAllLeaveRequests);
-  // Approve/reject decisions are tracked locally rather than mutating `data`,
-  // keeping the fetched payload as the single source of truth (same pattern
-  // as the dashboard's PendingLeaveRequests widget).
-  const [overrides, setOverrides] = useState<ReadonlyMap<string, LeaveStatus>>(new Map());
   const [activeTab, setActiveTab] = useState<LeaveStatus>("pending");
   const [categoryFilter, setCategoryFilter] = useState<LeaveType | "all">("all");
+  // Tracks which row currently has an approve/reject request in flight, so only that row's buttons disable.
+  const [submittingId, setSubmittingId] = useState<string | null>(null);
 
-  const requests = useMemo(() => {
-    if (!data) return null;
-    return data.map((request) => (overrides.has(request.id) ? { ...request, status: overrides.get(request.id)! } : request));
-  }, [data, overrides]);
+  const requests = data ?? null;
 
   const categoryOptions = useMemo(
     () => Array.from(new Set((data ?? []).map((r) => r.leaveType))).sort(),
@@ -97,16 +92,32 @@ export function LeaveRequestsPanel() {
     return requests.filter((r) => r.status === activeTab && (categoryFilter === "all" || r.leaveType === categoryFilter));
   }, [requests, activeTab, categoryFilter]);
 
-  function handleApprove(id: string) {
+  async function handleApprove(id: string) {
     const request = requests?.find((r) => r.id === id);
-    setOverrides((prev) => new Map(prev).set(id, "approved"));
-    toast.success(`${request?.staffName}'s leave request approved.`);
+    setSubmittingId(id);
+    try {
+      await updateLeaveRequestStatus(id, "APPROVED");
+      toast.success(`${request?.staffName}'s leave request approved.`);
+      refetch();
+    } catch {
+      toast.error("Couldn't approve the request", { description: "Please try again." });
+    } finally {
+      setSubmittingId(null);
+    }
   }
 
-  function handleReject(id: string) {
+  async function handleReject(id: string) {
     const request = requests?.find((r) => r.id === id);
-    setOverrides((prev) => new Map(prev).set(id, "rejected"));
-    toast.error(`${request?.staffName}'s leave request rejected.`);
+    setSubmittingId(id);
+    try {
+      await updateLeaveRequestStatus(id, "REJECTED");
+      toast.error(`${request?.staffName}'s leave request rejected.`);
+      refetch();
+    } catch {
+      toast.error("Couldn't reject the request", { description: "Please try again." });
+    } finally {
+      setSubmittingId(null);
+    }
   }
 
   const columns = useMemo<ColumnDef<LeaveRequest>[]>(
@@ -171,11 +182,16 @@ export function LeaveRequestsPanel() {
         cell: ({ row }) =>
           row.original.status === "pending" ? (
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => handleReject(row.original.id)}>
-                Reject
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={submittingId === row.original.id}
+                onClick={() => handleReject(row.original.id)}
+              >
+                {submittingId === row.original.id ? "Rejecting…" : "Reject"}
               </Button>
-              <Button size="sm" onClick={() => handleApprove(row.original.id)}>
-                Approve
+              <Button size="sm" disabled={submittingId === row.original.id} onClick={() => handleApprove(row.original.id)}>
+                {submittingId === row.original.id ? "Approving…" : "Approve"}
               </Button>
             </div>
           ) : row.original.status === "approved" ? (
@@ -190,7 +206,7 @@ export function LeaveRequestsPanel() {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps -- handleApprove/handleReject close over `requests`, which already drives this memo's row data
-    [],
+    [submittingId],
   );
 
   const table = useReactTable({

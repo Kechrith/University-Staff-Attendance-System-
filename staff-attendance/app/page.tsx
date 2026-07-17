@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BRAND } from "@/lib/constants";
 import { ROLES, type RoleConfig } from "@/lib/roles";
-import { login } from "@/services/superAdminService";
+import { login } from "@/services/authService";
 
 /** Dead-code-eliminated in production builds — test credentials and quick-login shortcuts only exist for local testing. */
 const SHOW_QUICK_SIGN_IN = process.env.NODE_ENV !== "production";
@@ -47,26 +47,21 @@ export default function LoginPage() {
   const roles = Object.values(ROLES);
 
   /**
-   * Super Admin is wired to the real backend (see `services/superAdminService.ts`)
-   * — signing in as that role authenticates for real. Every other role is
-   * still frontend-only, so they keep matching against `TEST_CREDENTIALS`
-   * locally until their own backend routes exist.
+   * Every role is now wired to the real backend (see `services/*.ts`) —
+   * signing in as any role authenticates for real via the shared
+   * `POST /api/auth/login` route and sets the session cookie.
    */
   async function enterRole(role: RoleConfig) {
-    if (role.key === "Super-Admin") {
-      const creds = TEST_CREDENTIALS[role.key];
-      setSigningIn(true);
-      try {
-        await login(creds.email, creds.password);
-        router.push(role.navItems[0].href);
-      } catch {
-        toast.error("Sign in failed", { description: "Couldn't reach the backend — is it running?" });
-      } finally {
-        setSigningIn(false);
-      }
-      return;
+    const creds = TEST_CREDENTIALS[role.key];
+    setSigningIn(true);
+    try {
+      await login(creds.email, creds.password);
+      router.push(role.navItems[0].href);
+    } catch {
+      toast.error("Sign in failed", { description: "Couldn't reach the backend — is it running?" });
+    } finally {
+      setSigningIn(false);
     }
-    router.push(role.navItems[0].href);
   }
 
   async function handleSignIn() {

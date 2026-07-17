@@ -82,6 +82,8 @@ export function LecturerLeaveHeader({ onRequestSubmitted }: LecturerLeaveHeaderP
       toast.success("Leave request submitted", { description: "Your Program Coordinator will review it shortly." });
       setOpen(false);
       resetForm();
+    } catch {
+      toast.error("Couldn't submit leave request", { description: "Please try again." });
     } finally {
       setIsSubmitting(false);
     }

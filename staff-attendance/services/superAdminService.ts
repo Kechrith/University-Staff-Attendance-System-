@@ -21,26 +21,7 @@ import type {
   TimetableChangeEntry,
   UserAccountRow,
 } from "@/types";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-
-async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...init,
-    credentials: "include",
-    headers: { "Content-Type": "application/json", ...init?.headers },
-  });
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.error ? JSON.stringify(body.error) : `Request to ${path} failed with ${res.status}`);
-  }
-  if (res.status === 204) return undefined as T;
-  return res.json() as Promise<T>;
-}
-
-export async function login(email: string, password: string): Promise<{ role: string; name: string }> {
-  return apiFetch("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
-}
+import { apiFetch } from "@/services/apiClient";
 
 export async function fetchCurrentUser(): Promise<CurrentUser> {
   return apiFetch("/api/me");
