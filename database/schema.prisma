@@ -1,5 +1,8 @@
 generator client {
   provider = "prisma-client-js"
+  // schema.prisma lives in database/, a sibling of backend/ — without this,
+  // Prisma would try (and fail) to find backend/'s node_modules on its own.
+  output   = "../backend/node_modules/.prisma/client"
 }
 
 datasource db {

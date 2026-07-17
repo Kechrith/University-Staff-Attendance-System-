@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "schema": "../database/schema.prisma",
+    "seed": "tsx ../database/seed.ts"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",

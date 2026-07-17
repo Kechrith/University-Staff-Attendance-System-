@@ -1,6 +1,6 @@
 /**
  * API layer for the Class Monitor pages — wired up to the real Express/Prisma
- * backend under `Backend/src/routes/classMonitor.ts` (mounted at
+ * backend under `backend/src/routes/classMonitor.ts` (mounted at
  * `/api/class-monitor`), mirroring `services/superAdminService.ts`.
  */
 import { apiFetch } from "@/services/apiClient";

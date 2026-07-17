@@ -2,8 +2,9 @@
 
 A staff attendance system for RUPP's Department of Data Science and Engineering — 5 roles (Super Admin, Department Head, Program Coordinator, Lecturer, Class Monitor), each with their own dashboard.
 
-- **Frontend**: `staff-attendance/` — Next.js + React + Tailwind
-- **Backend**: `Backend/` — Express + Prisma + PostgreSQL
+- **Frontend**: `frontend/` — Next.js + React + Tailwind
+- **Backend**: `backend/` — Express API
+- **Database**: `database/` — Prisma schema, migrations, and seed data (used by `backend/`)
 
 ## Running it
 
@@ -48,7 +49,7 @@ docker compose down            # stop everything (data persists)
 docker compose restart backend # picked up a backend code change
 ```
 
-If you edit `Backend/prisma/schema.prisma`, the backend container's Prisma Client goes stale until you run:
+If you edit `database/schema.prisma`, the backend container's Prisma Client goes stale until you run:
 ```bash
 docker compose exec backend npx prisma generate
 docker compose restart backend
@@ -57,7 +58,8 @@ docker compose restart backend
 ## Project structure
 
 ```
-Backend/                 Express API + Prisma schema/migrations/seed
-staff-attendance/        Next.js frontend
+backend/                 Express API (uses database/ for its Prisma schema)
+frontend/                Next.js frontend
+database/                Prisma schema, migrations, seed.ts
 docker-compose.yml       Runs postgres + backend + frontend + adminer together
 ```

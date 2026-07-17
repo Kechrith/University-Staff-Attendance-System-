@@ -1,6 +1,6 @@
 /**
  * API layer for the Lecturer pages — talks to the real Express/Prisma
- * backend under `/api/lecturer/...` (see `Backend/src/routes/lecturer.ts`).
+ * backend under `/api/lecturer/...` (see `backend/src/routes/lecturer.ts`).
  */
 import { apiFetch } from "@/services/apiClient";
 import type {

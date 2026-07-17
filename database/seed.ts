@@ -1,5 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
+// database/ has no node_modules of its own — seed.ts is run via `prisma db
+// seed` from backend/, so its dependencies (installed there) are resolved
+// with explicit relative paths instead of bare package names.
+import { PrismaClient } from "../backend/node_modules/@prisma/client/default.js";
+import bcrypt from "../backend/node_modules/bcryptjs/index.js";
 
 const prisma = new PrismaClient();
 

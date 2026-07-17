@@ -1,5 +1,5 @@
 /**
- * API layer — talks to the real Express/Prisma backend (see `Backend/`).
+ * API layer — talks to the real Express/Prisma backend (see `backend/`).
  */
 import { apiFetch } from "@/services/apiClient";
 import type {

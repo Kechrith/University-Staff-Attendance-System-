@@ -1,6 +1,6 @@
 /**
  * API layer for the Attendance overview page — talks to the real
- * Express/Prisma backend (see `Backend/`).
+ * Express/Prisma backend (see `backend/`).
  */
 import { apiFetch } from "@/services/apiClient";
 import type { AttendanceOverviewSummary, AttendanceRecord, StatusDistributionDatum } from "@/types";

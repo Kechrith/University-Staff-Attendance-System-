@@ -1,4 +1,4 @@
-/** Shared fetch helper for every role's service file — talks to the real Express/Prisma backend (see Backend/). */
+/** Shared fetch helper for every role's service file — talks to the real Express/Prisma backend (see backend/). */
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {

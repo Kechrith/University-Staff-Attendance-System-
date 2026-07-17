@@ -1,6 +1,6 @@
 /**
  * API layer for the Department Settings page — talks to the real
- * Express/Prisma backend (see `Backend/`).
+ * Express/Prisma backend (see `backend/`).
  */
 import { apiFetch } from "@/services/apiClient";
 import type { AttendancePolicy, DepartmentProfile, DepartmentStaffMember, LeaveApprovalRules } from "@/types";

@@ -1,6 +1,6 @@
 /**
  * API layer for the Super Admin pages — wired up to the real backend
- * (Backend/, Express + Prisma + Postgres, see docker-compose.yml at the
+ * (backend/, Express + Prisma + Postgres, see docker-compose.yml at the
  * repo root). Every function below keeps its original signature/return
  * type so no component above this layer needed to change.
  */

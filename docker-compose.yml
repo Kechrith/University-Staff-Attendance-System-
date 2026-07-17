@@ -20,7 +20,8 @@ services:
 
   backend:
     build:
-      context: ./Backend
+      context: .
+      dockerfile: backend/Dockerfile
     restart: unless-stopped
     depends_on:
       postgres:
@@ -33,12 +34,13 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - ./Backend:/app
-      - /app/node_modules
+      - ./backend:/app/backend
+      - ./database:/app/database
+      - /app/backend/node_modules
 
   frontend:
     build:
-      context: ./staff-attendance
+      context: ./frontend
     restart: unless-stopped
     depends_on:
       - backend
@@ -49,7 +51,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./staff-attendance:/app
+      - ./frontend:/app
       - /app/node_modules
       - /app/.next
 

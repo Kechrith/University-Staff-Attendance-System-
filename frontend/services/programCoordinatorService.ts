@@ -1,6 +1,6 @@
 /**
  * API layer for the Program Coordinator pages — talks to the real
- * Express/Prisma backend (see `Backend/src/routes/programCoordinator.ts`),
+ * Express/Prisma backend (see `backend/src/routes/programCoordinator.ts`),
  * mounted at `/api/program-coordinator`. Every function keeps its original
  * name/signature/return type so the hooks/components that call them didn't
  * need to change when this was wired up.
