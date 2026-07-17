@@ -8,11 +8,21 @@ A staff attendance system for RUPP's Department of Data Science and Engineering 
 
 ## Running it
 
-**Prerequisite**: [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running. Nothing else — no manual `.env` setup, no `npm install` needed on your host.
+**Prerequisites**: [Docker Desktop](https://www.docker.com/products/docker-desktop/), and a PostgreSQL server the backend can reach. The project doesn't run its own Postgres container — it connects to whatever you point it at.
 
 ```bash
 git clone https://github.com/Kechrith/University-Staff-Attendance-System-.git
 cd University-Staff-Attendance-System-
+```
+
+Create a `.env` file at the repo root (gitignored — this is per-person, not shared) pointing at a database you've created on your Postgres server:
+```bash
+# .env
+LOCAL_DATABASE_URL=postgresql://<user>:<password>@host.docker.internal:5432/<your-db-name>?schema=public
+```
+`host.docker.internal` is Docker Desktop's DNS name for reaching your host machine from inside a container — use it even if your Postgres is running natively on `localhost`. Create the target database first (e.g. via pgAdmin, or `psql -c "CREATE DATABASE your_db_name;"`) — the backend will apply migrations and seed it automatically on first start, but it won't create the database itself.
+
+```bash
 docker compose up
 ```
 
