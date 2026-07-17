@@ -24,7 +24,7 @@ That's it. This starts everything:
 | API | http://localhost:4000 |
 | Adminer (DB browser) | http://localhost:8080 |
 
-First run will take a few minutes (building images, installing dependencies). After that, `docker compose up` is fast — it reuses what's already built.
+First run will take a few minutes (building images, installing dependencies, applying migrations, seeding sample data). After that, `docker compose up` is fast — it reuses what's already built, and won't touch your data again (migrations/seeding only run against an empty database).
 
 Add `-d` to run it in the background instead of holding your terminal: `docker compose up -d`.
 
