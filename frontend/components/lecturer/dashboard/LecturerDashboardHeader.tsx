@@ -13,10 +13,10 @@ export function LecturerDashboardHeader() {
     : null;
 
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">My Dashboard</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">My Dashboard</h1>
+        <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
           Your teaching activity for{" "}
           {today ?? <span className="inline-block h-4 w-28 animate-pulse rounded-md bg-muted align-middle" aria-hidden="true" />}.
         </p>
@@ -24,6 +24,7 @@ export function LecturerDashboardHeader() {
 
       <Button
         variant="outline"
+        className="w-full sm:w-auto shrink-0 justify-center"
         onClick={() => toast.success("Export started", { description: "Preparing your teaching history export…" })}
       >
         <Download className="size-4" /> Export My History

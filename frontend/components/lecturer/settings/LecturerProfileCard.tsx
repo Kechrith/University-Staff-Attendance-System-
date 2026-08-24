@@ -82,6 +82,7 @@ export function LecturerProfileCard() {
         <Button
           variant="outline"
           size="sm"
+          className="w-full sm:w-auto justify-center"
           onClick={() => toast.message("Edit profile", { description: "Available once profile editing is connected." })}
         >
           Edit Profile

@@ -20,20 +20,20 @@ export function LecturerScheduleHeader({ weekOffset, onWeekOffsetChange }: Lectu
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">My Schedule</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Your assigned classes and office hours for the week.</p>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">My Schedule</h1>
+        <p className="mt-1 text-xs sm:text-sm text-muted-foreground">Your assigned classes and office hours for the week.</p>
       </div>
 
       <Card className="rounded-2xl border-border/60 shadow-sm">
-        <CardContent className="flex flex-wrap items-center justify-between gap-4 p-4">
-          <div className="flex items-center gap-1">
+        <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 sm:p-4">
+          <div className="flex items-center justify-between w-full sm:w-auto gap-2">
             <Button variant="ghost" size="icon-sm" aria-label="Previous week" onClick={() => onWeekOffsetChange(weekOffset - 1)}>
               <ChevronLeft className="size-4" />
             </Button>
             {error ? null : isLoading || !data ? (
               <Skeleton className="h-4 w-32" />
             ) : (
-              <span className="whitespace-nowrap text-sm font-semibold text-foreground">{data.weekRangeLabel}</span>
+              <span className="whitespace-nowrap text-xs sm:text-sm font-semibold text-foreground">{data.weekRangeLabel}</span>
             )}
             <Button variant="ghost" size="icon-sm" aria-label="Next week" onClick={() => onWeekOffsetChange(weekOffset + 1)}>
               <ChevronRight className="size-4" />

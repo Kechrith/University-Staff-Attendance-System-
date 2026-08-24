@@ -148,12 +148,12 @@ export function AttendanceRecordsList() {
     <SectionCard
       title="Attendance & Lesson Log"
       action={
-        <Tabs value={filterTab} onValueChange={(value) => setFilterTab(value as FilterTab)}>
-          <TabsList className="rounded-full bg-muted p-1">
-            <TabsTrigger value="all" className="rounded-full px-4 data-active:bg-primary data-active:text-primary-foreground">
+        <Tabs value={filterTab} onValueChange={(value) => setFilterTab(value as FilterTab)} className="w-full sm:w-auto">
+          <TabsList className="rounded-full bg-muted p-1 w-full sm:w-auto overflow-x-auto flex justify-start sm:justify-center">
+            <TabsTrigger value="all" className="rounded-full px-3.5 sm:px-4 text-xs sm:text-sm data-active:bg-primary data-active:text-primary-foreground">
               All
             </TabsTrigger>
-            <TabsTrigger value="flagged" className="rounded-full px-4 data-active:bg-primary data-active:text-primary-foreground">
+            <TabsTrigger value="flagged" className="rounded-full px-3.5 sm:px-4 text-xs sm:text-sm data-active:bg-primary data-active:text-primary-foreground">
               Flagged
             </TabsTrigger>
           </TabsList>
@@ -175,34 +175,34 @@ export function AttendanceRecordsList() {
       ) : (
         <div className="space-y-3">
           {filteredRecords.map((record) => (
-            <div key={record.id} className="rounded-lg border border-border/60 p-4">
-              <div className="flex flex-wrap items-start justify-between gap-3">
+            <div key={record.id} className="rounded-lg border border-border/60 p-3.5 sm:p-4 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-foreground">
+                  <p className="text-sm font-semibold text-foreground break-words">
                     {record.course} <span className="text-muted-foreground">· {record.classCode}</span>
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     {new Date(record.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} ·{" "}
                     {record.timeSlotLabel} · Logged by {record.loggedBy}
                   </p>
                 </div>
-                <Badge variant="outline" className={cn("shrink-0 rounded-full", STATUS_STYLES[record.status])}>
+                <Badge variant="outline" className={cn("self-start shrink-0 rounded-full text-xs", STATUS_STYLES[record.status])}>
                   {STATUS_LABEL[record.status]}
                 </Badge>
               </div>
 
-              <p className="mt-3 text-sm text-muted-foreground">{record.lessonSummary || "No lesson summary recorded."}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground break-words">{record.lessonSummary || "No lesson summary recorded."}</p>
 
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1">
                 {record.disputeStatus === "flagged" ? (
-                  <div className="flex items-start gap-2 rounded-lg bg-destructive/5 px-3 py-2 text-xs text-destructive">
+                  <div className="flex items-start gap-2 rounded-lg bg-destructive/5 px-3 py-2 text-xs text-destructive w-full sm:w-auto">
                     <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
-                    <span>
+                    <span className="break-words">
                       <span className="font-semibold">Disputed:</span> {record.disputeReason}
                     </span>
                   </div>
                 ) : record.disputeStatus === "resolved" ? (
-                  <Badge variant="outline" className="rounded-full bg-success/10 text-success border-success/30">
+                  <Badge variant="outline" className="rounded-full bg-success/10 text-success border-success/30 self-start">
                     Dispute resolved
                   </Badge>
                 ) : (
@@ -210,13 +210,15 @@ export function AttendanceRecordsList() {
                 )}
 
                 {record.disputeStatus === "none" ? (
-                  <DisputeSheet
-                    record={record}
-                    onSubmitted={(reason) => {
-                      setOverrides((prev) => ({ ...prev, [record.id]: { disputeStatus: "flagged", disputeReason: reason } }));
-                      void refetch();
-                    }}
-                  />
+                  <div className="w-full sm:w-auto">
+                    <DisputeSheet
+                      record={record}
+                      onSubmitted={(reason) => {
+                        setOverrides((prev) => ({ ...prev, [record.id]: { disputeStatus: "flagged", disputeReason: reason } }));
+                        void refetch();
+                      }}
+                    />
+                  </div>
                 ) : null}
               </div>
             </div>

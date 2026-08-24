@@ -158,13 +158,13 @@ export function LecturerLeaveRequestsTable({ extraRequests }: LecturerLeaveReque
     <SectionCard
       title="My Leave History"
       action={
-        <Tabs value={filterTab} onValueChange={(value) => setFilterTab(value as FilterTab)}>
-          <TabsList className="rounded-full bg-muted p-1">
+        <Tabs value={filterTab} onValueChange={(value) => setFilterTab(value as FilterTab)} className="w-full sm:w-auto">
+          <TabsList className="rounded-full bg-muted p-1 w-full sm:w-auto overflow-x-auto flex justify-start sm:justify-center">
             {FILTER_TABS.map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="rounded-full px-4 data-active:bg-primary data-active:text-primary-foreground"
+                className="rounded-full px-3 sm:px-4 text-xs sm:text-sm data-active:bg-primary data-active:text-primary-foreground"
               >
                 {tab.label}
               </TabsTrigger>
@@ -214,11 +214,11 @@ export function LecturerLeaveRequestsTable({ extraRequests }: LecturerLeaveReque
             </Table>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-muted-foreground">
             <span>
               Showing 1-{Math.min(PAGE_SIZE, filteredData.length)} of {filteredData.length} requests
             </span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap justify-center">
               <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                 Previous
               </Button>
@@ -227,7 +227,7 @@ export function LecturerLeaveRequestsTable({ extraRequests }: LecturerLeaveReque
                   key={i}
                   variant={i === pageIndex ? "default" : "outline"}
                   size="sm"
-                  className="size-8 p-0"
+                  className="size-8 p-0 text-xs"
                   onClick={() => table.setPageIndex(i)}
                 >
                   {i + 1}

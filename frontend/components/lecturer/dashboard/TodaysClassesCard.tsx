@@ -46,7 +46,7 @@ export function TodaysClassesCard() {
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-foreground">{item.course}</p>
                 <p className="text-xs text-muted-foreground">
-                  {item.classCode} · {item.timeSlotLabel} · {item.room}
+                  Class: {item.classCode} · {item.timeSlotLabel} · {item.room.startsWith("Room") ? item.room : `Room ${item.room}`}
                 </p>
               </div>
               <Badge variant="outline" className={cn("shrink-0 rounded-full", STATUS_STYLES[item.status])}>

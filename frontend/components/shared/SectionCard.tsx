@@ -16,12 +16,12 @@ interface SectionCardProps {
 export function SectionCard({ title, description, action, children, className, contentClassName }: SectionCardProps) {
   return (
     <Card className={cn("rounded-2xl border-border/60 shadow-sm transition-shadow hover:shadow-md", className)}>
-      <CardHeader className="flex flex-row items-start justify-between gap-3">
-        <div>
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4">
+        <div className="min-w-0 flex-1">
           <CardTitle className="text-base font-semibold">{title}</CardTitle>
           {description ? <p className="mt-0.5 text-xs text-muted-foreground">{description}</p> : null}
         </div>
-        {action}
+        {action ? <div className="shrink-0 w-full sm:w-auto">{action}</div> : null}
       </CardHeader>
       <CardContent className={contentClassName}>{children}</CardContent>
     </Card>

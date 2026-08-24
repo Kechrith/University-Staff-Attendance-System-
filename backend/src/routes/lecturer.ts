@@ -45,35 +45,34 @@ lecturerRouter.get("/notifications", async (req, res) => {
 
 // ---- Dashboard ----
 lecturerRouter.get("/dashboard-summary", async (req, res) => {
-  const now = new Date();
-  const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-
-  const [allRecords, thisMonthRecords, lastMonthRecords, pendingDisputes] = await Promise.all([
+  const [allRecords, weeklySessions, approvedLeaves, pendingPermissions, pendingDisputes] = await Promise.all([
     prisma.attendanceRecord.findMany({ where: { session: { lecturerId: req.user!.id } } }),
-    prisma.attendanceRecord.findMany({ where: { session: { lecturerId: req.user!.id }, date: { gte: startOfThisMonth } } }),
-    prisma.attendanceRecord.findMany({
-      where: { session: { lecturerId: req.user!.id }, date: { gte: startOfLastMonth, lt: startOfThisMonth } },
-    }),
+    prisma.classSession.findMany({ where: { lecturerId: req.user!.id } }),
+    prisma.leaveRequest.findMany({ where: { userId: req.user!.id, status: "APPROVED" } }),
+    prisma.leaveRequest.count({ where: { userId: req.user!.id, status: "PENDING" } }),
     prisma.dispute.count({ where: { raisedById: req.user!.id, status: { not: "RESOLVED" } } }),
   ]);
 
-  const rate = (records: { status: string }[]) =>
-    records.length === 0 ? 100 : Math.round((records.filter((r) => r.status !== "ABSENT").length / records.length) * 100);
+  const completedSessions = allRecords.length;
+  const weeklyCount = weeklySessions.length;
+  const totalSemesterSessions = weeklyCount * 15; // Standard 15-week semester
 
-  const attendanceRate = rate(allRecords);
-  const lastMonthRate = rate(lastMonthRecords);
-  const rateDiff = attendanceRate - lastMonthRate;
-  const attendanceRateTrendLabel =
-    lastMonthRecords.length === 0 ? "No data last month" : `${rateDiff >= 0 ? "+" : ""}${rateDiff}% vs last month`;
+  const presentCount = allRecords.filter((r) => r.status === "PRESENT").length;
+  const lateCount = allRecords.filter((r) => r.status === "LATE").length;
+  const absentCount = allRecords.filter((r) => r.status === "ABSENT").length;
+  const permissionCount = approvedLeaves.length;
 
-  const classesThisMonth = thisMonthRecords.length;
-  const classDiff = classesThisMonth - lastMonthRecords.length;
-  const classesThisMonthTrendLabel = `${classDiff >= 0 ? "+" : ""}${classDiff} vs last month`;
-
-  const lateCount = thisMonthRecords.filter((r) => r.status === "LATE").length;
-
-  res.json({ attendanceRate, attendanceRateTrendLabel, classesThisMonth, classesThisMonthTrendLabel, lateCount, pendingDisputes });
+  res.json({
+    completedSessions,
+    totalSemesterSessions,
+    weeklyCount,
+    presentCount,
+    lateCount,
+    absentCount,
+    permissionCount,
+    pendingPermissions,
+    pendingDisputes,
+  });
 });
 
 lecturerRouter.get("/todays-classes", async (req, res) => {

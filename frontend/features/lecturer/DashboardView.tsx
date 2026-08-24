@@ -1,25 +1,25 @@
 import { LecturerDashboardHeader } from "@/components/lecturer/dashboard/LecturerDashboardHeader";
-import { LecturerStatsCards } from "@/components/lecturer/dashboard/LecturerStatsCards";
-import { TodaysClassesCard } from "@/components/lecturer/dashboard/TodaysClassesCard";
+import { UpcomingSessionTile } from "@/components/lecturer/dashboard/UpcomingSessionTile";
+import { LecturerStatsTiles } from "@/components/lecturer/dashboard/LecturerStatsTiles";
 import { RecentRecordsCard } from "@/components/lecturer/dashboard/RecentRecordsCard";
 
 /**
- * Page-level composition for the Lecturer Dashboard: header, stat cards,
- * today's classes paired with the recent attendance/lesson-summary records
- * (FR-4). Server Component — interactivity and data fetching live in the
- * client components under `components/lecturer/dashboard/`.
+ * Page-level composition for the Lecturer Dashboard: header, upcoming session tile,
+ * sessions completed / attendance record tiles, and recent attendance records.
  */
 export function DashboardView() {
   return (
     <div className="space-y-6 pb-10">
       <LecturerDashboardHeader />
 
-      <LecturerStatsCards />
+      <UpcomingSessionTile />
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <TodaysClassesCard />
+      <LecturerStatsTiles />
+
+      <div>
         <RecentRecordsCard />
       </div>
     </div>
   );
 }
+

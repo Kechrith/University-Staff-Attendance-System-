@@ -556,12 +556,21 @@ export interface CoordinatorSecurityItem {
  */
 
 export interface LecturerDashboardSummary {
-  attendanceRate: number;
-  attendanceRateTrendLabel: string;
-  classesThisMonth: number;
-  classesThisMonthTrendLabel: string;
+  completedSessions: number;
+  totalSemesterSessions: number;
+  weeklyCount: number;
+  presentCount: number;
   lateCount: number;
+  absentCount: number;
+  permissionCount: number;
+  pendingPermissions: number;
   pendingDisputes: number;
+
+  /* Legacy fields for backward compatibility */
+  attendanceRate?: number;
+  attendanceRateTrendLabel?: string;
+  classesThisMonth?: number;
+  classesThisMonthTrendLabel?: string;
 }
 
 export type LecturerClassStatus = "upcoming" | "ongoing" | "completed";

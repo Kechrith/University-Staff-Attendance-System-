@@ -1,16 +1,33 @@
 name: attendhub
 
 services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: attendhub
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d attendhub"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
     restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
-      # Points at Hong's local native Postgres (see the root .env) — not a
-      # containerized database anymore. `host.docker.internal` is Docker
-      # Desktop's DNS name for reaching the host machine from a container.
-      DATABASE_URL: ${LOCAL_DATABASE_URL}
+      DATABASE_URL: postgresql://postgres:password@db:5432/attendhub?schema=public
       JWT_SECRET: local-dev-secret-do-not-use-in-production
       PORT: 4000
       CORS_ORIGIN: http://localhost:3000
@@ -43,3 +60,7 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+
+volumes:
+  pgdata:
+

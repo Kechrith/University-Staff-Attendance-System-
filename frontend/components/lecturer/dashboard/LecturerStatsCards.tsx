@@ -53,19 +53,19 @@ export function LecturerStatsCards() {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <DashboardCard
         title="Attendance Rate"
-        value={`${data.attendanceRate}%`}
+        value={`${data.attendanceRate ?? 100}%`}
         icon={CalendarCheck2}
         iconClassName="bg-success/10 text-success"
-        trendLabel={data.attendanceRateTrendLabel}
+        trendLabel={data.attendanceRateTrendLabel ?? ""}
         trendTone="success"
       />
 
       <DashboardCard
         title="Classes This Month"
-        value={data.classesThisMonth}
+        value={data.classesThisMonth ?? 0}
         icon={BookOpen}
         iconClassName="bg-primary/10 text-primary"
-        trendLabel={data.classesThisMonthTrendLabel}
+        trendLabel={data.classesThisMonthTrendLabel ?? ""}
         trendTone="muted"
       />
 
